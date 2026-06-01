@@ -1,0 +1,76 @@
+name: Local Qwen3 Config
+version: 1.0.0
+schema: v1
+
+# =============================================
+# MODELS SECTION
+# =============================================
+models:
+
+  # === MAIN CHAT / EDIT / REASONING MODEL ===
+  # This is your current small model. Good for basic tasks.
+  - name: Qwen3 0.6B
+    provider: ollama
+    model: qwen3:0.6b
+    apiBase: http://localhost:11434   # Default Ollama address
+    roles:
+      - chat
+      - edit
+      - apply
+    defaultCompletionOptions:
+      temperature: 0.7      # Balance between creativity and accuracy
+      topP: 0.95
+      maxTokens: 2048       # Increase if you want longer responses
+    # contextLength: 8192     # Uncomment if the model supports it
+
+  # === DEDICATED AUTOCOMPLETE MODEL ===
+  # Small & fast models work best for inline suggestions (Tab autocomplete).
+  # Using the same model here since you only have this one for now.
+  - name: Qwen3 0.6B Autocomplete
+    provider: ollama
+    model: qwen3:0.6b
+    apiBase: http://localhost:11434
+    roles:
+      - autocomplete
+    autocompleteOptions:
+      debounceDelay: 250          # How fast suggestions appear (lower = faster)
+      maxPromptTokens: 1024       # Keep prompt small for speed
+      modelTimeout: 300           # Timeout in milliseconds
+      onlyMyCode: true            # Focus only on your code (less noise)
+      # prefixPercentage: 0.6
+      # maxSuffixPercentage: 0.4
+
+  # === FUTURE MODELS (Uncomment when you pull them) ===
+  # Recommended stronger coding models:
+  # - name: Qwen2.5 Coder 7B
+  #   provider: ollama
+  #   model: qwen2.5-coder:7b
+  #   apiBase: http://localhost:11434
+  #   roles:
+  #     - chat
+  #     - edit
+  #     - apply
+
+# =============================================
+# OTHER USEFUL SETTINGS
+# =============================================
+
+# Context providers (what information Continue sends to the model)
+context:
+  - uses: continuedev/file-context          # Current open files
+  - uses: continuedev/diff-context          # Git changes
+  - uses: continuedev/terminal-context      # Terminal output
+  # - uses: continuedev/codebase-context    # Whole project (use carefully with small models)
+
+# Rules / Guidelines for the AI (optional but very useful)
+rules:
+  - "Always follow the existing code style and naming conventions."
+  - "Prefer clear, readable code over clever one-liners."
+  - "Add comments for complex logic."
+
+# Slash commands customization (optional)
+slashCommands:
+  - name: "edit"
+    description: "Edit the highlighted code"
+  - name: "comment"
+    description: "Add helpful comments"

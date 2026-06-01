@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kindred-frontend
+  labels:
+    app: kindred-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kindred-frontend
+  template:
+    metadata:
+      labels:
+        app: kindred-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: "<REGISTRY>/kindred:latest"
+          ports:
+            - containerPort: 80
+          env:
+            - name: NODE_ENV
+              value: "production"
+            # If you need runtime config, mount a config file or use an initContainer to template values.

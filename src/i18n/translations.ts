@@ -1,0 +1,171 @@
+export const translations = {
+  en: {
+    // Branding
+    brand: "KINDRED",
+    country: "CAMEROON",
+    tagline: "Unified National Directory",
+    unifiedPlatform: "Unified National Platform",
+
+    // Navigation / Header
+    searchOrphanages: "SEARCH ORPHANAGES...",
+    viewOnMap: "VIEW ON MAP",
+    loginWithGoogle: "Login with Google",
+    logout: "Logout",
+    backToDirectory: "Back to Directory",
+
+    // Onboarding Screen
+    onboardingTitle1: "Unified Directory",
+    onboardingDesc1: "Access a verified, national database of over 840+ orphanages and care institutions across all 10 regions of Cameroon.",
+    onboardingTitle2: "100% Offline Ready",
+    onboardingDesc2: "No internet? No problem. Data is securely cached locally to ensure seamless coordination during field visits in remote areas.",
+    onboardingTitle3: "Public Verification",
+    onboardingDesc3: "Contribute securely. Help us verify active listings and add new institutions to transparently protect vulnerable children.",
+    enterDirectory: "Enter Directory",
+    skipExplore: "Skip & Explore",
+
+    // Home Page
+    searchPlaceholder: "Search orphanages...",
+    allRegions: "All Regions",
+    minCapacity: "Min Capacity",
+    anyAgeGroup: "Any Age Group",
+    noResults: "No orphanages found matching your search.",
+    directoryStats: "Directory Stats",
+    totalInstitutions: "total institutions",
+    verifiedListings: "verified listings",
+    offlineModeReady: "Offline Mode Ready",
+    offlineModeDesc: "This PWA works offline. All Cameroon region listings have been cached on your device for seamless field access.",
+    contributePrompt: "Help expand our national directory. Submit a new orphanage listing for public verification.",
+    contributeNow: "Contribute Now",
+    searchLocation: "Search location...",
+    mapErrorTitle: "Oops! Something went wrong.",
+    mapErrorDesc: "This page didn't load Google Maps correctly. See the JavaScript console for technical details.",
+
+    // Submit / Listing Page
+    submitOrphanage: "Submit Orphanage",
+    basicInfo: "Basic Info",
+    orphanageName: "Orphanage Name",
+    region: "Region",
+    city: "City",
+    locationGps: "Location (GPS)",
+    latitude: "Latitude",
+    longitude: "Longitude",
+    contactDetails: "Contact & Details",
+    contactPhone: "Contact (Phone)",
+    email: "Email",
+    capacity: "Capacity",
+    photo: "Photo",
+    clickToUploadPhoto: "Click to upload photo",
+    selectedFile: "Selected File:",
+    description: "Description",
+    submit: "Submit",
+    submitting: "Submitting...",
+    submitSuccess: "Orphanage listing submitted successfully for verification!",
+    submitError: "Error submitting listing. Please try again.",
+
+    // Login Page
+    loginPrompt: "Log in to securely contribute data, update listing capacities, or submit new orphanages for public verification.",
+    emailAddress: "Email Address",
+    password: "Password",
+    signIn: "Sign In",
+    orSeparator: "or",
+    continueWithGoogle: "Continue with Google",
+    noAccountPrompt: "Don't have an access account yet?",
+    createOneHere: "Create one here",
+
+    // Register Page
+    createAccount: "Create Account",
+    joinDirectory: "Join Kindred Cameroon Directory",
+    fullName: "Full Name",
+    confirmPassword: "Confirm Password",
+    registerAsContributor: "Register As Contributor",
+    hasAccountPrompt: "Already have an active profile account?",
+    logInHere: "Log in here",
+    passwordsDontMatch: "Passwords do not match!"
+  },
+  fr: {
+    // Branding
+    brand: "KINDRED",
+    country: "CAMEROUN",
+    tagline: "Annuaire National Unifié",
+    unifiedPlatform: "Plateforme Nationale Unifiée",
+
+    // Navigation / Header
+    searchOrphanages: "RECHERCHER LES ORPHELINATS...",
+    viewOnMap: "VOIR SUR LA CARTE",
+    loginWithGoogle: "Se connecter avec Google",
+    logout: "Déconnexion",
+    backToDirectory: "Retour à l'Annuaire",
+
+    // Onboarding Screen
+    onboardingTitle1: "Annuaire Unifié",
+    onboardingDesc1: "Accédez à une base de données nationale vérifiée de plus de 840+ orphelinats et institutions de soins dans les 10 régions du Cameroun.",
+    onboardingTitle2: "100% Prêt Hors-ligne",
+    onboardingDesc2: "Pas d'internet ? Pas de problème. Les données sont mises en cache localement en toute sécurité pour assurer une coordination fluide lors des visites sur le terrain dans les zones reculées.",
+    onboardingTitle3: "Vérification Publique",
+    onboardingDesc3: "Contribuez en toute sécurité. Aidez-nous à vérifier les fiches actives et à ajouter de nouvelles institutions pour protéger les enfants vulnérables en toute transparence.",
+    enterDirectory: "Entrer dans l'Annuaire",
+    skipExplore: "Passer & Explorer",
+
+    // Home Page
+    searchPlaceholder: "Rechercher des orphelinats...",
+    allRegions: "Toutes les Régions",
+    minCapacity: "Capacité Min",
+    anyAgeGroup: "Tout Groupe d'Âge",
+    noResults: "Aucun orphelinat trouvé correspondant à votre recherche.",
+    directoryStats: "Stats de l'Annuaire",
+    totalInstitutions: "total des institutions",
+    verifiedListings: "fiches vérifiées",
+    offlineModeReady: "Mode Hors-ligne Prêt",
+    offlineModeDesc: "Cette PWA fonctionne hors-ligne. Toutes les fiches des régions du Cameroun ont été mises en cache sur votre appareil pour un accès fluide sur le terrain.",
+    contributePrompt: "Aidez à étendre notre annuaire national. Soumettez une nouvelle fiche d'orphelinat pour vérification publique.",
+    contributeNow: "Contribuer Maintenant",
+    searchLocation: "Rechercher un lieu...",
+    mapErrorTitle: "Oups ! Quelque chose s'est mal passé.",
+    mapErrorDesc: "Cette page n'a pas chargé Google Maps correctement. Voir la console JavaScript pour les détails techniques.",
+
+    // Submit / Listing Page
+    submitOrphanage: "Soumettre un Orphelinat",
+    basicInfo: "Infos de Base",
+    orphanageName: "Nom de l'Orphelinat",
+    region: "Région",
+    city: "Ville",
+    locationGps: "Localisation (GPS)",
+    latitude: "Latitude",
+    longitude: "Longitude",
+    contactDetails: "Contact & Détails",
+    contactPhone: "Contact (Téléphone)",
+    email: "Email",
+    capacity: "Capacité",
+    photo: "Photo",
+    clickToUploadPhoto: "Cliquez pour charger la photo",
+    selectedFile: "Fichier Sélectionné :",
+    description: "Description",
+    submit: "Soumettre",
+    submitting: "Soumission en cours...",
+    submitSuccess: "La fiche de l'orphelinat a été soumise avec succès pour vérification !",
+    submitError: "Erreur lors de la soumission. Veuillez réessayer.",
+
+    // Login Page
+    loginPrompt: "Connectez-vous pour contribuer aux données en toute sécurité, mettre à jour les capacités des fiches ou soumettre de nouveaux orphelinats pour vérification publique.",
+    emailAddress: "Adresse Email",
+    password: "Mot de passe",
+    signIn: "Se Connecter",
+    orSeparator: "ou",
+    continueWithGoogle: "Continuer avec Google",
+    noAccountPrompt: "Vous n'avez pas encore de compte d'accès ?",
+    createOneHere: "Créez-en un ici",
+
+    // Register Page
+    createAccount: "Créer un Compte",
+    joinDirectory: "Rejoindre l'Annuaire Kindred Cameroun",
+    fullName: "Nom Complet",
+    confirmPassword: "Confirmer le Mot de passe",
+    registerAsContributor: "S'inscrire comme Contributeur",
+    hasAccountPrompt: "Vous avez déjà un compte actif ?",
+    logInHere: "Se connecter ici",
+    passwordsDontMatch: "Les mots de passe ne correspondent pas !"
+  }
+};
+
+export type Language = 'en' | 'fr';
+export type TranslationKey = keyof typeof translations.en;

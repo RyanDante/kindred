@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+.kindred-map-hover {
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+  border-radius: 12px;
+  color: #0f172a;
+  padding: 8px;
+}
+
+.kindred-map-hover::before {
+  display: none;
+}
