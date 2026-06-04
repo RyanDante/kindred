@@ -26,7 +26,7 @@ export default function MapViewPanel({
   const { t } = useLanguage();
 
   return (
-    <div className="flex-1 bg-[#E2E8F0]/40 rounded-xl border border-slate-200 relative flex flex-col p-4 overflow-hidden">
+    <div className="flex-1 min-h-[320px] md:min-h-[520px] bg-[#E2E8F0]/40 rounded-xl border border-slate-200 relative flex flex-col p-4 overflow-hidden">
       <div className="absolute inset-x-4 top-4 z-10 mx-auto max-w-[40rem] px-2 sm:px-0">
         <div className="bg-white rounded-lg border border-slate-200 shadow-sm flex items-center pr-0 overflow-hidden">
           <input

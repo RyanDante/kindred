@@ -99,7 +99,7 @@ export default function OrphanagesGoogleMap({
   }
 
   return (
-    <div className="relative w-full h-full rounded-xl overflow-hidden border border-slate-200">
+    <div className="relative w-full min-h-[320px] h-full rounded-xl overflow-hidden border border-slate-200">
       <GoogleMap
         mapContainerStyle={{ width: '100%', height: '100%' }}
         center={center}
