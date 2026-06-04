@@ -4,9 +4,11 @@ import type { Orphanage } from '../types/orphanage';
 
 interface OrphanageCardProps {
   orphanage: Orphanage;
+  favorite?: boolean;
+  onToggleFavorite?: (orphanage: Orphanage) => void;
 }
 
-export default function OrphanageCard({ orphanage }: OrphanageCardProps) {
+export default function OrphanageCard({ orphanage, favorite = false, onToggleFavorite }: OrphanageCardProps) {
   const { language } = useLanguage();
 
   const directionsUrl =
@@ -88,6 +90,17 @@ export default function OrphanageCard({ orphanage }: OrphanageCardProps) {
           </div>
 
           <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              aria-pressed={favorite}
+              onClick={() => onToggleFavorite?.(orphanage)}
+              className={`inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1.5 rounded-lg transition-colors ${
+                favorite ? 'bg-amber-100 text-amber-800 hover:bg-amber-200' : 'text-slate-600 bg-slate-50 hover:bg-slate-100'
+              }`}
+            >
+              <Star size={10} className={favorite ? 'fill-amber-500 text-amber-500' : 'text-slate-500'} />
+              {favorite ? (language === 'fr' ? 'Favori' : 'Saved') : (language === 'fr' ? 'Enregistrer' : 'Save')}
+            </button>
             <a
               href={directionsUrl}
               target="_blank"

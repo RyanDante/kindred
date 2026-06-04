@@ -1,7 +1,8 @@
-import { Home } from 'lucide-react';
+import { Home, Moon, Sun } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../hooks/useTheme';
 
 interface AppHeaderProps {
   viewMode: 'search' | 'map';
@@ -11,6 +12,7 @@ interface AppHeaderProps {
 export default function AppHeader({ viewMode, onViewModeChange }: AppHeaderProps) {
   const { language, setLanguage, t } = useLanguage();
   const { user, logout } = useAuth();
+  const { isDarkMode, toggleDarkMode } = useTheme();
 
   return (
     <header className="bg-[#1E3A8A] text-white px-6 py-4 flex flex-col gap-4 md:flex-row md:items-center justify-between shadow-md">
@@ -53,6 +55,15 @@ export default function AppHeader({ viewMode, onViewModeChange }: AppHeaderProps
       </div>
 
       <div className="flex items-center gap-4">
+        <button
+          type="button"
+          onClick={toggleDarkMode}
+          className="bg-white/10 hover:bg-white/20 text-white p-2 rounded transition-colors border border-white/20"
+          title={isDarkMode ? 'Light mode' : 'Dark mode'}
+        >
+          {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+        </button>
+        
         <div className="flex bg-white/10 rounded overflow-hidden p-0.5 text-xs font-bold">
           <button
             type="button"

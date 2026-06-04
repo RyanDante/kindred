@@ -8,9 +8,11 @@ import { fuzzyScore } from '../../utils/search';
 import AppHeader from '../../components/layout/AppHeader';
 import DirectorySidebar from '../../components/layout/DirectorySidebar';
 import FloatingSubmitButton from '../../components/layout/FloatingSubmitButton';
+import BottomNav from '../../components/layout/BottomNav';
 import SearchPanel from '../../components/home/SearchPanel';
 import MapViewPanel from '../../components/home/MapViewPanel';
 import MapLockedPrompt from '../../components/home/MapLockedPrompt';
+import { useFavorites } from '../../hooks/useFavorites';
 
 export default function HomePage() {
   const { user } = useAuth();
@@ -24,6 +26,7 @@ export default function HomePage() {
   const [minCapacity, setMinCapacity] = useState<number>(0);
 
   const { orphanages, loading: loadingListings } = useOrphanages({ autoSeed: true });
+  const { favoriteIds, toggleFavorite } = useFavorites(user?.uid);
 
   const filteredOrphanages = orphanages.filter((orphanage) => {
     if (!orphanage.verified) return false;
@@ -74,6 +77,10 @@ export default function HomePage() {
     setSelectedMapOrphanageId(null);
   };
 
+  const handleToggleFavorite = (orphanage: (typeof filteredOrphanages)[0]) => {
+    toggleFavorite(orphanage.id);
+  };
+
   return (
     <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-700 flex flex-col">
       <AppHeader viewMode={viewMode} onViewModeChange={setViewMode} />
@@ -100,6 +107,8 @@ export default function HomePage() {
                 minCapacity={minCapacity}
                 onMinCapacityChange={setMinCapacity}
                 filteredOrphanages={filteredOrphanages}
+                favoriteIds={favoriteIds}
+                onToggleFavorite={handleToggleFavorite}
                 loading={loadingListings}
               />
             ) : !user ? (
@@ -126,6 +135,7 @@ export default function HomePage() {
       </div>
 
       <FloatingSubmitButton />
+      <BottomNav />
     </div>
   );
 }

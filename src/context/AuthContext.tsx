@@ -18,6 +18,7 @@ interface AuthContextProps {
   registerWithEmail: (email: string, password: string, name: string) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
+  updateProfileDetails: (name: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -53,6 +54,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await signOut(auth);
   };
 
+  const updateProfileDetails = async (displayName: string) => {
+    if (!auth.currentUser) {
+      throw new Error('No authenticated user.');
+    }
+
+    await updateProfile(auth.currentUser, { displayName });
+    setUser({ ...auth.currentUser });
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#1E3A8A] flex flex-col items-center justify-center p-6 text-white font-sans select-none">
@@ -69,7 +79,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, loginWithEmail, registerWithEmail, loginWithGoogle, logout }}>
+    <AuthContext.Provider value={{ user, loading, loginWithEmail, registerWithEmail, loginWithGoogle, logout, updateProfileDetails }}>
       {children}
     </AuthContext.Provider>
   );
