@@ -1,7 +1,8 @@
 import { Search } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import type { Orphanage } from '../../types/orphanage';
-import OrphanagesGoogleMap from '../maps/OrphanagesGoogleMap';
+import LeafletOrphanageMap from '../maps/LeafletOrphanageMap';
 import MapSearchSuggestions from '../ui/MapSearchSuggestions';
 
 interface MapViewPanelProps {
@@ -24,16 +25,50 @@ export default function MapViewPanel({
   loading,
 }: MapViewPanelProps) {
   const { t } = useLanguage();
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const suggestionRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setShowSuggestions(mapSearchSuggestions.length > 0 && mapSearchQuery.trim().length > 0);
+  }, [mapSearchSuggestions, mapSearchQuery]);
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Node;
+      if (!suggestionRef.current?.contains(target)) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    document.addEventListener('touchstart', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener('touchstart', handleOutsideClick);
+    };
+  }, []);
+
+  const handleInputChange = (value: string) => {
+    onMapSearchChange(value);
+    setShowSuggestions(value.trim().length > 0);
+  };
+
+  const handleSuggestionSelect = (orphanage: Orphanage) => {
+    onSelectOrphanage(orphanage);
+    setShowSuggestions(false);
+  };
 
   return (
     <div className="flex-1 min-h-[320px] md:min-h-[520px] bg-[#E2E8F0]/40 rounded-xl border border-slate-200 relative flex flex-col p-4 overflow-hidden">
-      <div className="absolute inset-x-4 top-4 z-10 mx-auto max-w-[40rem] px-2 sm:px-0">
+      <div ref={suggestionRef} className="absolute inset-x-4 top-4 z-10 mx-auto max-w-[40rem] px-2 sm:px-0">
         <div className="bg-white rounded-lg border border-slate-200 shadow-sm flex items-center pr-0 overflow-hidden">
           <input
             type="text"
             placeholder={t('searchLocation')}
             value={mapSearchQuery}
-            onChange={(e) => onMapSearchChange(e.target.value)}
+            onChange={(e) => handleInputChange(e.target.value)}
+            onFocus={() => setShowSuggestions(mapSearchSuggestions.length > 0)}
             className="w-full text-xs font-medium text-slate-700 bg-transparent outline-none pl-4 py-2.5 placeholder-slate-400"
           />
           <button
@@ -43,14 +78,16 @@ export default function MapViewPanel({
             <Search size={14} />
           </button>
         </div>
-        <MapSearchSuggestions
-          suggestions={mapSearchSuggestions}
-          onSelect={onSelectOrphanage}
-          getSubtitle={(orphanage) => `${orphanage.city}, ${orphanage.region}`}
-        />
+        {showSuggestions && (
+          <MapSearchSuggestions
+            suggestions={mapSearchSuggestions}
+            onSelect={handleSuggestionSelect}
+            getSubtitle={(orphanage) => `${orphanage.city}, ${orphanage.region}`}
+          />
+        )}
       </div>
 
-      <OrphanagesGoogleMap
+      <LeafletOrphanageMap
         orphanages={mapOrphanages}
         loading={loading}
         selectedOrphanageId={selectedMapOrphanageId}
