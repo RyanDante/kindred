@@ -41,24 +41,24 @@ export default function HomePage() {
     return matchesSearch && matchesRegion && matchesCapacity;
   });
 
-  const filteredMapOrphanages = useMemo(() => {
+  const mapOrphanages = useMemo(() => {
     const query = mapSearchQuery.trim();
-    if (!query) return filteredOrphanages;
+    if (!query) return orphanages;
 
-    return filteredOrphanages.filter((orphanage) => {
+    return orphanages.filter((orphanage) => {
       const text = `${orphanage.name} ${orphanage.city} ${orphanage.region} ${orphanage.description}`;
       return fuzzyScore(text, query) > 0;
     });
-  }, [filteredOrphanages, mapSearchQuery]);
+  }, [orphanages, mapSearchQuery]);
 
   const getOrphanageSearchText = useCallback(
-    (orphanage: (typeof filteredOrphanages)[0]) =>
+    (orphanage: (typeof orphanages)[0]) =>
       `${orphanage.name} ${orphanage.city} ${orphanage.region} ${orphanage.description}`,
     []
   );
 
   const mapSearchSuggestions = useMapSearchSuggestions(
-    filteredOrphanages,
+    mapOrphanages,
     mapSearchQuery,
     getOrphanageSearchText,
     5
@@ -111,7 +111,7 @@ export default function HomePage() {
                 mapSearchSuggestions={mapSearchSuggestions}
                 selectedMapOrphanageId={selectedMapOrphanageId}
                 onSelectOrphanage={handleSelectMapOrphanage}
-                filteredMapOrphanages={filteredMapOrphanages}
+                mapOrphanages={mapOrphanages}
                 loading={loadingListings}
               />
             )}

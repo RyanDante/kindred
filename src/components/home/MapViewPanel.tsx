@@ -10,7 +10,7 @@ interface MapViewPanelProps {
   mapSearchSuggestions: Orphanage[];
   selectedMapOrphanageId: string | null;
   onSelectOrphanage: (orphanage: Orphanage) => void;
-  filteredMapOrphanages: Orphanage[];
+  mapOrphanages: Orphanage[];
   loading: boolean;
 }
 
@@ -20,7 +20,7 @@ export default function MapViewPanel({
   mapSearchSuggestions,
   selectedMapOrphanageId,
   onSelectOrphanage,
-  filteredMapOrphanages,
+  mapOrphanages,
   loading,
 }: MapViewPanelProps) {
   const { t } = useLanguage();
@@ -51,7 +51,7 @@ export default function MapViewPanel({
       </div>
 
       <OrphanagesGoogleMap
-        orphanages={filteredMapOrphanages}
+        orphanages={mapOrphanages}
         loading={loading}
         selectedOrphanageId={selectedMapOrphanageId}
       />

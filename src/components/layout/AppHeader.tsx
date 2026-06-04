@@ -42,6 +42,14 @@ export default function AppHeader({ viewMode, onViewModeChange }: AppHeaderProps
         >
           {t('viewOnMap')}
         </button>
+        {user && (
+          <Link
+            to="/profile"
+            className="text-slate-200 hover:text-white transition-colors"
+          >
+            {t('profile')}
+          </Link>
+        )}
       </div>
 
       <div className="flex items-center gap-4">

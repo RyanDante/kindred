@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { GoogleMap, Marker, InfoWindow, useJsApiLoader } from '@react-google-maps/api';
 import type { Orphanage } from '../../types/orphanage';
 import { CAMEROON_BOUNDS, defaultCenter, isWithinCameroon } from '../../constants/maps';
@@ -38,6 +38,8 @@ export default function OrphanagesGoogleMap({
   loading = false,
   selectedOrphanageId = null,
 }: OrphanagesGoogleMapProps) {
+  const [activeOrphanageId, setActiveOrphanageId] = useState<string | null>(selectedOrphanageId);
+  const [hoveredOrphanageId, setHoveredOrphanageId] = useState<string | null>(null);
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
     libraries: ['places'],
@@ -48,7 +50,13 @@ export default function OrphanagesGoogleMap({
     [orphanages]
   );
 
-  const selectedOrphanage = cameroonOrphanages.find((o) => o.id === selectedOrphanageId) ?? null;
+  useEffect(() => {
+    setActiveOrphanageId(selectedOrphanageId);
+  }, [selectedOrphanageId]);
+
+  const selectedOrphanage = cameroonOrphanages.find((o) => o.id === activeOrphanageId) ?? null;
+  const hoveredOrphanage = cameroonOrphanages.find((o) => o.id === hoveredOrphanageId) ?? null;
+  const focusedOrphanage = selectedOrphanage || hoveredOrphanage;
 
   const center = useMemo(() => {
     if (selectedOrphanage) return { lat: selectedOrphanage.latitude, lng: selectedOrphanage.longitude };
@@ -68,13 +76,10 @@ export default function OrphanagesGoogleMap({
         id: o.id,
         position: { lat: o.latitude, lng: o.longitude },
         title: o.name,
-        color: o.verified ? '#10B981' : '#F97316',
+        color: activeOrphanageId === o.id ? '#1D4ED8' : o.verified ? '#10B981' : '#F97316',
         hoverHtml: markerHoverHtml(o.name, `${o.city}, ${o.region}`, o.photo, `Capacity: ${o.capacity}`),
-        popupHtml: selectedOrphanageId === o.id
-          ? `<div class="text-[13px] text-slate-800"><strong>${esc(o.name)}</strong><div class="text-slate-600 text-xs mt-1">${esc(o.city)}, ${esc(o.region)}</div><p class="text-xs text-slate-500 mt-2 line-clamp-3">${esc(o.description || 'No description.')}</p><div class="text-[11px] text-slate-500">Capacity: <b>${o.capacity}</b></div></div>`
-          : undefined,
       })),
-    [cameroonOrphanages, selectedOrphanageId]
+    [cameroonOrphanages, activeOrphanageId]
   );
 
   if (loading || !isLoaded) {
@@ -117,26 +122,32 @@ export default function OrphanagesGoogleMap({
             key={marker.id}
             position={marker.position}
             title={marker.title}
+            onClick={() => setActiveOrphanageId(marker.id)}
+            onMouseOver={() => setHoveredOrphanageId(marker.id)}
+            onMouseOut={() => setHoveredOrphanageId(null)}
             icon={{
               path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z',
               fillColor: marker.color,
               fillOpacity: 1,
               strokeColor: '#ffffff',
               strokeWeight: 2,
-              scale: 1.1,
+              scale: activeOrphanageId === marker.id ? 1.4 : 1.1,
             }}
           />
         ))}
 
-        {selectedOrphanage && (
+        {focusedOrphanage && (
           <InfoWindow
-            position={{ lat: selectedOrphanage.latitude, lng: selectedOrphanage.longitude }}
-            onCloseClick={() => undefined}
+            position={{ lat: focusedOrphanage.latitude, lng: focusedOrphanage.longitude }}
+            onCloseClick={() => setActiveOrphanageId(null)}
           >
             <div className="max-w-xs text-[13px] leading-snug text-slate-800 font-sans">
-              <strong className="block text-sm font-semibold mb-1">{selectedOrphanage.name}</strong>
-              <div className="text-slate-600 text-[11px]">{selectedOrphanage.city}, {selectedOrphanage.region}</div>
-              <div className="text-[11px] text-slate-500 mt-2">Capacity: {selectedOrphanage.capacity}</div>
+              <strong className="block text-sm font-semibold mb-1">{focusedOrphanage.name}</strong>
+              <div className="text-slate-600 text-[11px]">{focusedOrphanage.city}, {focusedOrphanage.region}</div>
+              <div className="text-[11px] text-slate-500 mt-2">Capacity: {focusedOrphanage.capacity}</div>
+              {focusedOrphanage.description && (
+                <div className="text-[11px] text-slate-500 mt-1 line-clamp-3">{focusedOrphanage.description}</div>
+              )}
             </div>
           </InfoWindow>
         )}

@@ -8,6 +8,7 @@ import Login from '../pages/auth/Login';
 import Register from '../pages/auth/Register';
 import AdminDashboard from '../pages/admin/AdminDashboard';
 import AdminEditOrphanage from '../pages/admin/AdminEditOrphanage';
+import UserProfile from '../pages/profile/UserProfile';
 import { useAuth } from '../context/AuthContext';
 
 function ProtectedRoute({ children }: { children: React.ReactElement }) {
@@ -55,6 +56,7 @@ export default function AppRouter() {
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
         <Route path="/submit" element={<ProtectedRoute><SubmitOrphanage /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
         <Route path="/register" element={<Register />} />
         <Route path="/admin" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
         <Route path="/admin/edit/:id" element={<AdminRoute><AdminEditOrphanage /></AdminRoute>} />
