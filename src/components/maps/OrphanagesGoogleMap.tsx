@@ -40,6 +40,9 @@ export default function OrphanagesGoogleMap({
 }: OrphanagesGoogleMapProps) {
   const [activeOrphanageId, setActiveOrphanageId] = useState<string | null>(selectedOrphanageId);
   const [hoveredOrphanageId, setHoveredOrphanageId] = useState<string | null>(null);
+  const [mapCenter, setMapCenter] = useState<google.maps.LatLngLiteral>(defaultCenter);
+  const [mapZoom, setMapZoom] = useState<number>(7);
+  const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
     libraries: ['places'],
@@ -58,17 +61,29 @@ export default function OrphanagesGoogleMap({
   const hoveredOrphanage = cameroonOrphanages.find((o) => o.id === hoveredOrphanageId) ?? null;
   const focusedOrphanage = selectedOrphanage || hoveredOrphanage;
 
-  const center = useMemo(() => {
-    if (selectedOrphanage) return { lat: selectedOrphanage.latitude, lng: selectedOrphanage.longitude };
-    if (cameroonOrphanages.length > 0) {
+  useEffect(() => {
+    if (selectedOrphanage) {
+      const target = { lat: selectedOrphanage.latitude, lng: selectedOrphanage.longitude };
+      setMapCenter(target);
+      setMapZoom(13);
+      if (mapInstance) {
+        mapInstance.panTo(target);
+        mapInstance.setZoom(13);
+      }
+    } else if (cameroonOrphanages.length > 0) {
       const lat = cameroonOrphanages.reduce((s, o) => s + o.latitude, 0) / cameroonOrphanages.length;
       const lng = cameroonOrphanages.reduce((s, o) => s + o.longitude, 0) / cameroonOrphanages.length;
-      return { lat, lng };
+      setMapCenter({ lat, lng });
+      setMapZoom(7);
+      if (mapInstance) {
+        mapInstance.panTo({ lat, lng });
+        mapInstance.setZoom(7);
+      }
+    } else {
+      setMapCenter(defaultCenter);
+      setMapZoom(7);
     }
-    return defaultCenter;
-  }, [selectedOrphanage, cameroonOrphanages]);
-
-  const zoom = selectedOrphanage ? 11 : 7;
+  }, [selectedOrphanage, cameroonOrphanages, mapInstance]);
 
   const markers = useMemo(
     () =>
@@ -99,11 +114,12 @@ export default function OrphanagesGoogleMap({
   }
 
   return (
-    <div className="relative w-full min-h-[320px] h-full rounded-xl overflow-hidden border border-slate-200">
+    <div className="relative w-full min-h-[420px] h-full rounded-xl overflow-hidden border border-slate-200">
       <GoogleMap
         mapContainerStyle={{ width: '100%', height: '100%' }}
-        center={center}
-        zoom={zoom}
+        center={mapCenter}
+        zoom={mapZoom}
+        onLoad={(map) => setMapInstance(map)}
         options={{
           clickableIcons: false,
           fullscreenControl: true,
@@ -122,7 +138,15 @@ export default function OrphanagesGoogleMap({
             key={marker.id}
             position={marker.position}
             title={marker.title}
-            onClick={() => setActiveOrphanageId(marker.id)}
+            onClick={() => {
+              setActiveOrphanageId(marker.id);
+              setMapCenter(marker.position);
+              setMapZoom(13);
+              if (mapInstance) {
+                mapInstance.panTo(marker.position);
+                mapInstance.setZoom(13);
+              }
+            }}
             onMouseOver={() => setHoveredOrphanageId(marker.id)}
             onMouseOut={() => setHoveredOrphanageId(null)}
             icon={{
