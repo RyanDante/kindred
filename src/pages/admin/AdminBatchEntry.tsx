@@ -42,12 +42,6 @@ interface GoogleMapsPlacesService {
   ) => void;
 }
 type GoogleMapsWindow = { google?: { maps?: { places?: { PlacesService: new (map: GoogleMapInstance) => GoogleMapsPlacesService } } } };
-interface MapMouseEventLike { latLng?: { lat: () => number; lng: () => number } }
-
-const containerStyle = {
-  width: '100%',
-  height: '100%',
-};
 
 const createBatchPin = (lat: number, lng: number): BatchPin => ({
   id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
@@ -78,6 +72,11 @@ const createBatchPinFromPlace = (place: PlaceOrphanage): BatchPin => ({
   photo: '',
   verified: false,
 });
+
+const containerStyle = {
+  width: '100%',
+  height: '100%',
+};
 
 export default function AdminBatchEntry() {
   const [mapSearchQuery, setMapSearchQuery] = useState('');
@@ -255,7 +254,7 @@ export default function AdminBatchEntry() {
     loadGooglePlaces(map);
   }, [loadGooglePlaces]);
 
-  const handleMapClick = useCallback((event: MapMouseEventLike) => {
+  const handleMapClick = useCallback((event: google.maps.MapMouseEvent) => {
     const lat = event.latLng?.lat();
     const lng = event.latLng?.lng();
     if (lat === undefined || lng === undefined) return;
@@ -264,7 +263,7 @@ export default function AdminBatchEntry() {
     if (googleMaps?.maps?.places && mapRef.current) {
       const service = new googleMaps.maps.places.PlacesService(mapRef.current);
       service.nearbySearch({ location: { lat, lng }, radius: 200, keyword: 'orphanage' }, (results: GooglePlaceResult[] | null, status: string) => {
-        if (status === 'OK' && results?.length > 0) {
+        if (status === 'OK' && results && results.length > 0) {
           const place = results[0];
           const address = place.formatted_address || place.vicinity || 'Cameroon';
           const { city, region } = deriveAddressParts(address);

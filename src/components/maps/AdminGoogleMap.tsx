@@ -16,10 +16,6 @@ interface AdminGoogleMapProps {
   onOsmPlaceIdChange?: (id: string | null) => void;
 }
 
-function esc(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
-}
-
 export default function AdminGoogleMap({
   items,
   loading = false,
@@ -50,8 +46,8 @@ export default function AdminGoogleMap({
   const selectedItem = cameroonItems.find((item) => item.id === (selectedItemId ?? activeItemId)) ?? null;
   const selectedPlace = mapPlaces.find((place) => place.id === selectedOsmPlaceId) ?? null;
 
-  const center = useMemo(() => {
-    if (selectedItem) return { lat: selectedItem.latitude, lng: selectedItem.longitude };
+  const center = useMemo<google.maps.LatLngLiteral>(() => {
+    if (selectedItem) return { lat: selectedItem.latitude!, lng: selectedItem.longitude! };
     if (selectedPlace) return { lat: selectedPlace.latitude, lng: selectedPlace.longitude };
     if (osmTypingResults.length > 0) return { lat: osmTypingResults[0].latitude, lng: osmTypingResults[0].longitude };
     if (mapPlaces.length > 0) {
