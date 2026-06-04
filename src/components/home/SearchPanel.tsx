@@ -53,7 +53,7 @@ export default function SearchPanel({
         allLabel={t('allRegions')}
       />
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <SelectDropdown
           value={minCapacity}
           onChange={(val) => onMinCapacityChange(Number(val))}
@@ -82,7 +82,7 @@ export default function SearchPanel({
         {loading ? (
           <LoadingIndicator message="Syncing with live directory..." />
         ) : filteredOrphanages.length > 0 ? (
-          <div className="flex-1 overflow-y-auto pr-1 grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 select-none">
+          <div className="flex-1 overflow-y-auto pr-1 grid grid-cols-1 gap-6 md:grid-cols-2 pb-6 select-none">
             {filteredOrphanages.map((orphanage) => (
               <OrphanageCard key={orphanage.id} orphanage={orphanage} />
             ))}

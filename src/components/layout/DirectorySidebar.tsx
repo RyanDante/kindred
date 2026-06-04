@@ -4,23 +4,23 @@ import type { Orphanage } from '../../types/orphanage';
 
 interface DirectorySidebarProps {
   orphanages: Orphanage[];
-  loading: boolean;
 }
 
-export default function DirectorySidebar({ orphanages, loading }: DirectorySidebarProps) {
+export default function DirectorySidebar({ orphanages }: DirectorySidebarProps) {
   const { t } = useLanguage();
 
-  const totalCount = loading ? 842 : 839 + orphanages.length;
-  const verifiedCount = loading ? 612 : 609 + orphanages.filter((o) => o.verified).length;
-  const totalPercentage = Math.min(100, Math.round((totalCount / 900) * 100));
-  const verifiedPercentage = Math.min(100, Math.round((verifiedCount / totalCount) * 100));
+  const totalCount = orphanages.length;
+  const verifiedCount = orphanages.filter((o) => o.verified).length;
+  const totalPercentage = totalCount ? Math.min(100, Math.round((totalCount / 900) * 100)) : 0;
+  const verifiedPercentage = totalCount ? Math.min(100, Math.round((verifiedCount / totalCount) * 100)) : 0;
 
   return (
-    <div className="w-80 flex flex-col gap-6 shrink-0 select-none">
+    <div className="w-full lg:w-80 flex flex-col gap-6 shrink-0 select-none">
       <div className="bg-white border border-slate-100 rounded-xl p-5 shadow-sm">
-        <h2 className="text-[11px] font-bold tracking-wider text-slate-400 uppercase mb-4">
+        <h2 className="text-[11px] font-bold tracking-wider text-slate-400 uppercase mb-2">
           {t('directoryStats')}
         </h2>
+        <p className="text-[11px] text-slate-500 mb-4">{t('liveDatabaseStats')}</p>
 
         <div className="mb-5">
           <div className="flex justify-between items-baseline mb-1">

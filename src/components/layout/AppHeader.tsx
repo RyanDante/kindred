@@ -13,7 +13,7 @@ export default function AppHeader({ viewMode, onViewModeChange }: AppHeaderProps
   const { user, logout } = useAuth();
 
   return (
-    <header className="bg-[#1E3A8A] text-white px-6 py-4 flex items-center justify-between shadow-md">
+    <header className="bg-[#1E3A8A] text-white px-6 py-4 flex flex-col gap-4 md:flex-row md:items-center justify-between shadow-md">
       <div className="flex items-center gap-2">
         <div className="bg-white p-2 rounded text-[#1E3A8A]">
           <Home size={20} className="fill-[#1E3A8A]" />
@@ -23,7 +23,7 @@ export default function AppHeader({ viewMode, onViewModeChange }: AppHeaderProps
         </span>
       </div>
 
-      <div className="flex items-center gap-8 text-sm font-semibold tracking-wider">
+      <div className="flex flex-wrap items-center gap-4 text-sm font-semibold tracking-wider">
         <button
           type="button"
           onClick={() => onViewModeChange('search')}

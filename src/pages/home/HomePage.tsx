@@ -2,6 +2,7 @@ import { useMemo, useState, useCallback } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useOrphanages } from '../../hooks/useOrphanages';
 import { useMapSearchSuggestions } from '../../hooks/useMapSearchSuggestions';
+import { useLanguage } from '../../i18n/LanguageContext';
 import { ALL_REGIONS_OPTION } from '../../constants/regions';
 import { fuzzyScore } from '../../utils/search';
 import AppHeader from '../../components/layout/AppHeader';
@@ -13,7 +14,9 @@ import MapLockedPrompt from '../../components/home/MapLockedPrompt';
 
 export default function HomePage() {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [viewMode, setViewMode] = useState<'search' | 'map'>('search');
+  const [sidebarVisible, setSidebarVisible] = useState(true);
   const [selectedRegion, setSelectedRegion] = useState(ALL_REGIONS_OPTION);
   const [searchQuery, setSearchQuery] = useState('');
   const [mapSearchQuery, setMapSearchQuery] = useState('');
@@ -75,33 +78,51 @@ export default function HomePage() {
     <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-700 flex flex-col">
       <AppHeader viewMode={viewMode} onViewModeChange={setViewMode} />
 
-      <div className="flex-1 flex p-6 gap-6 max-w-[1600px] w-full mx-auto">
-        {viewMode === 'search' ? (
-          <SearchPanel
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-            selectedRegion={selectedRegion}
-            onRegionChange={setSelectedRegion}
-            minCapacity={minCapacity}
-            onMinCapacityChange={setMinCapacity}
-            filteredOrphanages={filteredOrphanages}
-            loading={loadingListings}
-          />
-        ) : !user ? (
-          <MapLockedPrompt />
-        ) : (
-          <MapViewPanel
-            mapSearchQuery={mapSearchQuery}
-            onMapSearchChange={handleMapSearchChange}
-            mapSearchSuggestions={mapSearchSuggestions}
-            selectedMapOrphanageId={selectedMapOrphanageId}
-            onSelectOrphanage={handleSelectMapOrphanage}
-            filteredMapOrphanages={filteredMapOrphanages}
-            loading={loadingListings}
-          />
-        )}
+      <div className="flex-1 flex flex-col gap-6 p-4 md:p-6 max-w-[1600px] w-full mx-auto">
+        <div className="flex items-center justify-end">
+          <button
+            type="button"
+            className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-slate-700 shadow-sm transition hover:border-slate-300 hover:bg-slate-50"
+            onClick={() => setSidebarVisible((visible) => !visible)}
+          >
+            {sidebarVisible ? t('hidePanel') : t('showPanel')}
+          </button>
+        </div>
 
-        <DirectorySidebar orphanages={orphanages} loading={loadingListings} />
+        <div className="flex-1 flex flex-col gap-6 lg:flex-row">
+          <div className="flex-1 flex flex-col gap-6">
+            {viewMode === 'search' ? (
+              <SearchPanel
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+                selectedRegion={selectedRegion}
+                onRegionChange={setSelectedRegion}
+                minCapacity={minCapacity}
+                onMinCapacityChange={setMinCapacity}
+                filteredOrphanages={filteredOrphanages}
+                loading={loadingListings}
+              />
+            ) : !user ? (
+              <MapLockedPrompt />
+            ) : (
+              <MapViewPanel
+                mapSearchQuery={mapSearchQuery}
+                onMapSearchChange={handleMapSearchChange}
+                mapSearchSuggestions={mapSearchSuggestions}
+                selectedMapOrphanageId={selectedMapOrphanageId}
+                onSelectOrphanage={handleSelectMapOrphanage}
+                filteredMapOrphanages={filteredMapOrphanages}
+                loading={loadingListings}
+              />
+            )}
+          </div>
+
+          {sidebarVisible && (
+            <div className="w-full lg:w-80 flex-shrink-0">
+              <DirectorySidebar orphanages={orphanages} />
+            </div>
+          )}
+        </div>
       </div>
 
       <FloatingSubmitButton />
